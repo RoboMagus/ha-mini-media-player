@@ -74,6 +74,7 @@ class MiniMediaPlayer extends LitElement {
   @state() private cardHeight = 0;
   @state() private foregroundColor = '';
   @state() private backgroundColor = '';
+  @state() private flatBack = false;
 
   @state() private config!: MiniMediaPlayerConfiguration;
   @state() private _hass!: HomeAssistant;
@@ -257,28 +258,35 @@ class MiniMediaPlayer extends LitElement {
   renderGradient(): TemplateResult | undefined {
     if (this.config.artwork !== 'material') return;
 
-    const gradientStyle = {
+    const gradientStyle0 = {
       backgroundImage: `linear-gradient(to left,
-       transparent 0px,
-       ${this.addAlpha(this.backgroundColor, 0.007)} ${this.cardHeight*0.124}px,
-       ${this.addAlpha(this.backgroundColor, 0.025)} ${this.cardHeight*0.237}px,
-       ${this.addAlpha(this.backgroundColor, 0.056)} ${this.cardHeight*0.339}px,
-       ${this.addAlpha(this.backgroundColor, 0.097)} ${this.cardHeight*0.432}px,
-       ${this.addAlpha(this.backgroundColor, 0.148)} ${this.cardHeight*0.515}px,
-       ${this.addAlpha(this.backgroundColor, 0.208)} ${this.cardHeight*0.590}px,
-       ${this.addAlpha(this.backgroundColor, 0.276)} ${this.cardHeight*0.657}px,
-       ${this.addAlpha(this.backgroundColor, 0.351)} ${this.cardHeight*0.717}px,
-       ${this.addAlpha(this.backgroundColor, 0.432)} ${this.cardHeight*0.770}px,
-       ${this.addAlpha(this.backgroundColor, 0.519)} ${this.cardHeight*0.819}px,
-       ${this.addAlpha(this.backgroundColor, 0.609)} ${this.cardHeight*0.862}px,
-       ${this.addAlpha(this.backgroundColor, 0.704)} ${this.cardHeight*0.901}px,
-       ${this.addAlpha(this.backgroundColor, 0.801)} ${this.cardHeight*0.936}px,
-       ${this.addAlpha(this.backgroundColor, 0.900)} ${this.cardHeight*0.969}px,
-       ${this.backgroundColor} ${this.cardHeight}px,
-       ${this.backgroundColor} 100%)`,
+        transparent 0px,
+        ${this.addAlpha(this.backgroundColor, 0.007)} ${this.cardHeight*0.124}px,
+        ${this.addAlpha(this.backgroundColor, 0.025)} ${this.cardHeight*0.237}px,
+        ${this.addAlpha(this.backgroundColor, 0.056)} ${this.cardHeight*0.339}px,
+        ${this.addAlpha(this.backgroundColor, 0.097)} ${this.cardHeight*0.432}px,
+        ${this.addAlpha(this.backgroundColor, 0.148)} ${this.cardHeight*0.515}px,
+        ${this.addAlpha(this.backgroundColor, 0.208)} ${this.cardHeight*0.590}px,
+        ${this.addAlpha(this.backgroundColor, 0.276)} ${this.cardHeight*0.657}px,
+        ${this.addAlpha(this.backgroundColor, 0.351)} ${this.cardHeight*0.717}px,
+        ${this.addAlpha(this.backgroundColor, 0.432)} ${this.cardHeight*0.770}px,
+        ${this.addAlpha(this.backgroundColor, 0.519)} ${this.cardHeight*0.819}px,
+        ${this.addAlpha(this.backgroundColor, 0.609)} ${this.cardHeight*0.862}px,
+        ${this.addAlpha(this.backgroundColor, 0.704)} ${this.cardHeight*0.901}px,
+        ${this.addAlpha(this.backgroundColor, 0.801)} ${this.cardHeight*0.936}px,
+        ${this.addAlpha(this.backgroundColor, 0.900)} ${this.cardHeight*0.969}px,
+        ${this.backgroundColor} ${this.cardHeight}px,
+        ${this.backgroundColor} 100%)`,
+    };
+    const gradientStyle1 = {
+      backgroundImage: `linear-gradient(to left, 
+        transparent 0px, 
+        transparent ${this.cardHeight*0.9}px, 
+        ${this.backgroundColor} ${this.cardHeight}px, 
+        ${this.backgroundColor} 100%)`,
     };
 
-    return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
+    return html`<div class="cover-gradient" style=${styleMap(this.flatBack ? gradientStyle1 : gradientStyle0)}></div>`;
   }
 
   renderBackground(): TemplateResult | undefined {
@@ -458,16 +466,18 @@ class MiniMediaPlayer extends LitElement {
     if (!this.player.picture) {
       this.foregroundColor = '';
       this.backgroundColor = '';
+      this.flatBack = false;
       return;
     }
 
     try {
-      [this.foregroundColor, this.backgroundColor] = await colorsFromPicture(this.player.picture);
+      [this.foregroundColor, this.backgroundColor, this.flatBack] = await colorsFromPicture(this.player.picture);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error('Error getting Image Colors', err);
       this.foregroundColor = '';
       this.backgroundColor = '';
+      this.flatBack = false;
     }
   }
 }
