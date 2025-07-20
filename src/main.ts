@@ -80,6 +80,7 @@ class MiniMediaPlayer extends LitElement {
   @state() private cardHeight = 0;
   @state() private foregroundColor = '';
   @state() private backgroundColor = '';
+  @state() private flatBack = false;
 
   @state() private config!: MiniMediaPlayerConfiguration;
   @state() private _hass!: HomeAssistant;
@@ -265,7 +266,7 @@ class MiniMediaPlayer extends LitElement {
 
     const background = this.backgroundColor
       || 'var(--ha-card-background, var(--card-background-color, var(--paper-card-background-color, white)))';
-    const gradientStyle = {
+    const gradientStyle0 = {
       backgroundImage: `linear-gradient(to left,
        transparent 0px,
        ${this.addAlpha(background, 0.007)} ${this.cardHeight*0.124}px,
@@ -285,8 +286,15 @@ class MiniMediaPlayer extends LitElement {
        ${background} ${this.cardHeight}px,
        ${background} 100%)`,
     };
+    const gradientStyle1 = {
+      backgroundImage: `linear-gradient(to left, 
+        transparent 0px, 
+        transparent ${this.cardHeight*0.9}px, 
+        ${background} ${this.cardHeight}px, 
+        ${background} 100%)`,
+    };
 
-    return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
+    return html`<div class="cover-gradient" style=${styleMap(this.flatBack ? gradientStyle1 : gradientStyle0)}></div>`;
   }
 
   renderBackground(): TemplateResult | undefined {
@@ -475,16 +483,18 @@ class MiniMediaPlayer extends LitElement {
     if (!this.player.picture) {
       this.foregroundColor = '';
       this.backgroundColor = '';
+      this.flatBack = false;
       return;
     }
 
     try {
-      [this.foregroundColor, this.backgroundColor] = await colorsFromPicture(this.player.picture);
+      [this.foregroundColor, this.backgroundColor, this.flatBack] = await colorsFromPicture(this.player.picture);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error('Error getting Image Colors', err);
       this.foregroundColor = '';
       this.backgroundColor = '';
+      this.flatBack = false;
     }
   }
 }

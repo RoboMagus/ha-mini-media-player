@@ -27,6 +27,9 @@ const colorGenerator = (colors) => {
   const backgroundColor = colors[0];
   let foregroundColor;
 
+  const totalPopulation=colors.reduce((result, input) => {return result + input._population}, 0);
+  const isFlat = backgroundColor._population > 0.8*totalPopulation;
+
   const contrastRatios = new Map();
   const approvedContrastRatio = (hex, rgb) => {
     if (!contrastRatios.has(hex)) {
@@ -73,7 +76,7 @@ const colorGenerator = (colors) => {
     foregroundColor = backgroundColor.getYiq() < 200 ? [255, 255, 255] : [0, 0, 0];
   }
 
-  return [new backgroundColor.constructor(foregroundColor, 0).hex, backgroundColor.hex];
+  return [new backgroundColor.constructor(foregroundColor, 0).hex, backgroundColor.hex, isFlat];
 };
 
 Vibrant._pipeline.generator.register('default', colorGenerator);
