@@ -259,9 +259,23 @@ class MiniMediaPlayer extends LitElement {
 
     const gradientStyle = {
       backgroundImage: `linear-gradient(to left,
-        transparent 0,
-        ${this.backgroundColor} ${this.cardHeight}px,
-        ${this.backgroundColor} 100%)`,
+       transparent 0px,
+       ${this.addAlpha(this.backgroundColor, 0.007)} ${this.cardHeight*0.124}px,
+       ${this.addAlpha(this.backgroundColor, 0.025)} ${this.cardHeight*0.237}px,
+       ${this.addAlpha(this.backgroundColor, 0.056)} ${this.cardHeight*0.339}px,
+       ${this.addAlpha(this.backgroundColor, 0.097)} ${this.cardHeight*0.432}px,
+       ${this.addAlpha(this.backgroundColor, 0.148)} ${this.cardHeight*0.515}px,
+       ${this.addAlpha(this.backgroundColor, 0.208)} ${this.cardHeight*0.590}px,
+       ${this.addAlpha(this.backgroundColor, 0.276)} ${this.cardHeight*0.657}px,
+       ${this.addAlpha(this.backgroundColor, 0.351)} ${this.cardHeight*0.717}px,
+       ${this.addAlpha(this.backgroundColor, 0.432)} ${this.cardHeight*0.770}px,
+       ${this.addAlpha(this.backgroundColor, 0.519)} ${this.cardHeight*0.819}px,
+       ${this.addAlpha(this.backgroundColor, 0.609)} ${this.cardHeight*0.862}px,
+       ${this.addAlpha(this.backgroundColor, 0.704)} ${this.cardHeight*0.901}px,
+       ${this.addAlpha(this.backgroundColor, 0.801)} ${this.cardHeight*0.936}px,
+       ${this.addAlpha(this.backgroundColor, 0.900)} ${this.cardHeight*0.969}px,
+       ${this.backgroundColor} ${this.cardHeight}px,
+       ${this.backgroundColor} 100%)`,
     };
 
     return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
@@ -431,6 +445,11 @@ class MiniMediaPlayer extends LitElement {
 
   public getCardSize(): number {
     return this.config.collapse ? 1 : 2;
+  }
+
+  public addAlpha(c, a): string {
+    var _o = Math.round(Math.min(Math.max(a ?? 1, 0), 1) * 255);
+    return c+_o.toString(16).toUpperCase().padStart(2, 0);
   }
 
   async setColors(): Promise<void> {
