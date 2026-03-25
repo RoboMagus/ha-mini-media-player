@@ -456,8 +456,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   public addAlpha(c, a): string {
-    var _o = Math.round(Math.min(Math.max(a ?? 1, 0), 1) * 255);
-    return c+_o.toString(16).toUpperCase().padStart(2, 0);
+    const _o = Math.round(Math.min(Math.max(a ?? 1, 0), 1) * 255);
+    return c+_o.toString(16).toUpperCase().padStart(2, '0');
   }
 
   async setColors(): Promise<void> {
