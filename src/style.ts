@@ -149,10 +149,10 @@ const style = css`
     height: 100%;
     right: 0;
     left: unset;
-    animation: fade-in 4s cubic-bezier(0.21, 0.61, 0.35, 1) !important;
+    animation: fade-in 0.5s cubic-bezier(0.21, 0.61, 0.35, 1) !important;
   }
   ha-card[artwork='material'].--has-artwork .cover.--prev {
-    animation: fade-in 1s linear reverse forwards !important;
+    animation: fade-in 0.25s linear reverse forwards !important;
   }
   ha-card[artwork='material'].--has-artwork .cover-gradient {
     position: absolute;
@@ -183,7 +183,6 @@ const style = css`
     right: 0;
     bottom: 0;
     left: 0;
-    transition: opacity 0.75s linear, width 0.05s cubic-bezier(0.21, 0.61, 0.35, 1);
     will-change: opacity;
   }
   .cover:before {
@@ -191,7 +190,6 @@ const style = css`
     background: var(--mmp-overlay-color);
   }
   .cover {
-    animation: fade-in 0.5s cubic-bezier(0.21, 0.61, 0.35, 1);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
